@@ -9,6 +9,10 @@
 # Local History for Visual Studio Code
 .history/
 
+# MacOS system file
+._log4py.py
+._LICENSE
+
 # Built Visual Studio Code Extensions
 *.vsix
 
