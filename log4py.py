@@ -1,5 +1,13 @@
+'''
+Copyright Ghink © 2014 MIT
+Website https://www.ghink.net/
+Author Bigsk (https://www.xiaxinzhe.cn/)
+See the copytight
+'''
 import os, time, shutil
 from threading import Thread
+
+__VERSION__ = (2, 1, 0)
 
 class log(object):
    def __init__(self, workdir):
@@ -37,7 +45,6 @@ class log(object):
       Guard thread for recording logs and archiving.
       '''
       workdir = os.path.abspath(os.path.join(self.workdir, "logs"))
-      self.__suicide = False
       def archive(workdir):
          timeStamp = time.time()
          logsList = []
@@ -72,17 +79,9 @@ class log(object):
                   data, self.__logs = self.__logs, []
                   for log in data:
                      fb.write("[{}] [{}] {}\n".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(log[0])), log[1], log[2]))
-                  if self.__suicide or today != time.strftime("%Y-%m-%d", time.localtime()):
+                  if today != time.strftime("%Y-%m-%d", time.localtime()):
                      break
                archive(workdir)
-         if self.__suicide:
-               break
-   def suicide(self):
-      '''
-      Suicide the guard thread.
-      Before close the program, You have to exec this function.
-      '''
-      self.__suicide = True
    def record(self, level = "INFO", *content, split = " ", output = True):
       '''
       Record logs.
@@ -151,5 +150,4 @@ class log(object):
          temp.append(str(con))
       content = split.join(temp)
       self.record("FATAL", content, split = split, output = output)
-      self.__suicide = True
       raise Exception(content)
